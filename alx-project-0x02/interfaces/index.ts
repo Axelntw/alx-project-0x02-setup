@@ -13,6 +13,8 @@ export interface ButtonProps {
   onClick?: () => void;
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
+  size?: 'small' | 'medium' | 'large';
+  shape?: 'rounded-sm' | 'rounded-md' | 'rounded-full';
 }
 
 export interface CardProps {
