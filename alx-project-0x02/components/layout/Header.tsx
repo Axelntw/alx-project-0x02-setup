@@ -1,27 +1,25 @@
-import Link from 'next/link';
+import Link from "next/link";
+import { useRouter } from "next/router";
 
-const Header = () => {
+export default function Header() {
+  const router = useRouter();
+
   return (
-    <header className="w-full py-4 px-6 bg-white shadow-md">
-      <nav className="flex items-center justify-between max-w-6xl mx-auto">
-        <Link href="/" className="text-xl font-bold">
-          My App
+    <header className="bg-gray-800 text-white p-4">
+      <nav className="flex gap-4">
+        <Link 
+          href="/home"
+          className={`hover:text-gray-300 ${router.pathname === '/home' ? 'text-blue-400' : ''}`}
+        >
+          Home
         </Link>
-        <ul className="flex gap-6">
-          <li>
-            <Link href="/" className="hover:text-blue-600">
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/about" className="hover:text-blue-600">
-              About
-            </Link>
-          </li>
-        </ul>
+        <Link 
+          href="/about"
+          className={`hover:text-gray-300 ${router.pathname === '/about' ? 'text-blue-400' : ''}`}
+        >
+          About
+        </Link>
       </nav>
     </header>
   );
-};
-
-export default Header;
+}
