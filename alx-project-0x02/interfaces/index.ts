@@ -14,3 +14,8 @@ export interface ButtonProps {
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
 }
+
+export interface CardProps {
+  title: string;
+  content: string;
+}
