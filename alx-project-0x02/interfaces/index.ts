@@ -13,8 +13,6 @@ export interface ButtonProps {
   onClick?: () => void;
   variant?: 'primary' | 'secondary';
   disabled?: boolean;
-  size?: 'small' | 'medium' | 'large';
-  shape?: 'rounded-sm' | 'rounded-md' | 'rounded-full';
 }
 
 export interface CardProps {
@@ -32,4 +30,25 @@ export interface Post {
   id: string;
   title: string;
   content: string;
+}
+
+export interface PostProps {
+  id: number;
+  title: string;
+  body: string;
+  userId: number;
+}
+
+export interface UserProps {
+  id: number;
+  name: string;
+  email: string;
+  address: {
+    street: string;
+    suite: string;
+    city: string;
+    zipcode: string;
+  };
+  phone: string;
+  website: string;
 }
