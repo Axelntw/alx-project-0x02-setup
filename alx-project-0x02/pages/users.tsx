@@ -1,81 +1,90 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { GetStaticProps } from 'next';
 import Header from '@/components/layout/Header';
 import UserCard from '@/components/common/UserCard';
 import { type UserProps } from '../interfaces';
 
-const Users: React.FC = () => {
-  const [users, setUsers] = useState<UserProps[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface UsersPageProps {
+  users: UserProps[];
+}
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('https://jsonplaceholder.typicode.com/users');
-        
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
-        }
-        
-        const data: UserProps[] = await response.json();
-        setUsers(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUsers();
-  }, []);
-
-  if (loading) {
-    return (
-      <div>
-        <Header />
-        <div className="container">
-          <div className="loading">Loading users...</div>
-        </div>
-        <style jsx>{`
-          .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-          }
-          .loading {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #666;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div>
-        <Header />
-        <div className="container">
-          <div className="error">Error: {error}</div>
-        </div>
-        <style jsx>{`
-          .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 40px 20px;
-          }
-          .error {
-            text-align: center;
-            font-size: 1.2rem;
-            color: #dc3545;
-          }
-        `}</style>
-      </div>
-    );
-  }
-
+const Users: React.FC<UsersPageProps> = ({ users }) => {
   return (
     <div>
       <Header />
+      <div className="container">
+        <h1>All Users</h1>
+        <div className="users-grid">
+          {users.map(user => (
+            <UserCard
+              key={user.id}
+              id={user.id}
+              name={user.name}
+              email={user.email}
+              address={user.address}
+              phone={user.phone}
+              website={user.website}
+            />
+          ))}
+        </div>
+      </div>
+
+      <style jsx>{`
+        .container {
+          max-width: 1000px;
+          margin: 0 auto;
+          padding: 40px 20px;
+        }
+
+        h1 {
+          text-align: center;
+          color: #333;
+          margin-bottom: 40px;
+          font-size: 2.5rem;
+        }
+
+        .users-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+          gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+          .users-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+export const getStaticProps: GetStaticProps = async () => {
+  try {
+    const response = await fetch('https://jsonplaceholder.typicode.com/users');
+    
+    if (!response.ok) {
+      throw new Error('Failed to fetch users');
+    }
+    
+    const users: UserProps[] = await response.json();
+
+    return {
+      props: {
+        users,
+      },
+      revalidate: 60, // Revalidate every 60 seconds
+    };
+  } catch (error) {
+    console.error('Error fetching users:', error);
+    
+    return {
+      props: {
+        users: [],
+      },
+      revalidate: 60,
+    };
+  }
+};
+
+export default Users;

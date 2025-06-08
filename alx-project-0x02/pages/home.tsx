@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Header from '@/components/layout/Header';
 import Card from '@/components/common/Card';
 import PostModal from '@/components/common/PostModal';
 import { type Post } from '../interfaces';
@@ -41,29 +42,32 @@ const Home: React.FC = () => {
   };
 
   return (
-    <div className="home-container">
-      <div className="header">
-        <h1>Welcome to Our Home Page</h1>
-        <button onClick={handleOpenModal} className="add-post-button">
-          Add New Post
-        </button>
-      </div>
-      
-      <div className="posts-container">
-        {posts.map(post => (
-          <Card 
-            key={post.id}
-            title={post.title} 
-            content={post.content} 
-          />
-        ))}
-      </div>
+    <div>
+      <Header />
+      <div className="home-container">
+        <div className="header">
+          <h1>Welcome to Our Home Page</h1>
+          <button onClick={handleOpenModal} className="add-post-button">
+            Add New Post
+          </button>
+        </div>
+        
+        <div className="posts-container">
+          {posts.map(post => (
+            <Card 
+              key={post.id}
+              title={post.title} 
+              content={post.content} 
+            />
+          ))}
+        </div>
 
-      <PostModal 
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onSubmit={handleAddPost}
-      />
+        <PostModal 
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          onSubmit={handleAddPost}
+        />
+      </div>
 
       <style jsx>{`
         .home-container {
